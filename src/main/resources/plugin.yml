@@ -1,0 +1,15 @@
+name: Man10Score
+version: 1.0
+softdepend:
+  - Man10CommonLibs
+main: red.man10.man10score.Man10Score
+api-version: 1.16
+commands:
+  score:
+    default: op
+  mscore:
+    default: op
+  thank:
+    default: op
+  fuck:
+    default: op
