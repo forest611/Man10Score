@@ -7,13 +7,9 @@ api-version: 1.16
 commands:
   score:
     default: op
-    permission: man10score.user
   mscore:
     default: op
-    permission: man10score.op
   thank:
     default: op
-    permission: man10score.user
   fuck:
     default: op
-    permission: man10score.user

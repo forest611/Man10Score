@@ -26,6 +26,7 @@ class Man10Score : JavaPlugin() , Listener{
 
         server.pluginManager.registerEvents(this,this)
         plugin = this
+
     }
 
     override fun onDisable() {
@@ -38,7 +39,11 @@ class Man10Score : JavaPlugin() , Listener{
 
             "mscore" ->{
 
-                if (args.isNullOrEmpty()){
+                if (!sender.hasPermission("man10score.op")){
+                    return true
+                }
+
+                if (args.size!=4){
 
                     sendMessage(sender,"§a/mscore give <player> <score> <理由> : 指定ユーザーにスコアを与えます")
                     sendMessage(sender,"§a/mscore take <player> <score> <理由> : 指定ユーザーのスコアを減らします")
@@ -95,6 +100,10 @@ class Man10Score : JavaPlugin() , Listener{
 
             "score" ->{
 
+                if (!sender.hasPermission("man10score.user")){
+                    return true
+                }
+
                 if (sender !is Player)return false
 
                 es.execute {
@@ -103,6 +112,10 @@ class Man10Score : JavaPlugin() , Listener{
             }
 
             "thank" ->{
+
+                if (!sender.hasPermission("man10score.user")){
+                    return true
+                }
 
                 if (sender !is Player)return false
 
@@ -127,6 +140,10 @@ class Man10Score : JavaPlugin() , Listener{
             }
 
             "fuck" ->{
+
+                if (!sender.hasPermission("man10score.user")){
+                    return true
+                }
 
                 if (sender !is Player)return false
 
