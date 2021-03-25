@@ -13,12 +13,19 @@ import java.util.concurrent.Executors
 class Man10Score : JavaPlugin() , Listener{
 
     private val es = Executors.newCachedThreadPool()
-    private val prefix = "§b[§aMan10Score§b]"
+    private val prefix = "§b[§dMan10Score§b]"
+
+
+    companion object{
+        lateinit var plugin : Man10Score
+    }
 
     override fun onEnable() {
         // Plugin startup logic
+        saveDefaultConfig()
 
         server.pluginManager.registerEvents(this,this)
+        plugin = this
     }
 
     override fun onDisable() {
@@ -148,6 +155,7 @@ class Man10Score : JavaPlugin() , Listener{
         val p = e.player
 
         es.execute {
+            Thread.sleep(500)
             showScore(p)
         }
     }

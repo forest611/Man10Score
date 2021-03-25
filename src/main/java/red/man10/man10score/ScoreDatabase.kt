@@ -1,14 +1,13 @@
 package red.man10.man10score
 
 import org.bukkit.command.CommandSender
-import org.bukkit.entity.Player
 import java.util.*
 
 object ScoreDatabase {
 
-    private val mysql = MySQLManager(Man10Score(),"Score")
+    private val mysql = MySQLManager(Man10Score.plugin,"Score")
 
-    fun getUUID(name:String):UUID?{
+    private fun getUUID(name:String):UUID?{
 
         val rs = mysql.query("select uuid from player_data where mcid='$name';")?:return null
 
@@ -67,7 +66,7 @@ object ScoreDatabase {
     }
 
     fun canThank(uuid: UUID):Boolean{
-        val rs = mysql.query("select * from score_log where uuid=$uuid and reason=[give]:Thankした;")?:return true
+        val rs = mysql.query("select * from score_log where uuid=$uuid and reason='[give]:Thankした';")?:return true
 
         var ret = false
 
