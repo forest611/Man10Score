@@ -45,12 +45,10 @@ object ScoreDatabase {
 
         val uuid = getUUID(mcid)?:return false
 
-        val score = getScore(uuid)+amount
-
-        mysql.execute("update player_data set score=${score} where uuid='$uuid';")
+        mysql.execute("update player_data set score=score+${amount} where uuid='$uuid';")
 
         mysql.execute("INSERT INTO score_log (mcid, uuid, score, note, issuer,now_score, date) " +
-                "VALUES ('$mcid', '$uuid', $amount, '[give]:$reason','${issuer.name}',${score}, now())")
+                "VALUES ('$mcid', '$uuid', $amount, '[give]:$reason','${issuer.name}',${getScore(uuid)}, now())")
 
         return true
     }

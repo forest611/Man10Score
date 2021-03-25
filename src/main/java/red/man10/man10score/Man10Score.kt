@@ -59,7 +59,7 @@ class Man10Score : JavaPlugin() , Listener{
 
                         "give" ->{
 
-                            if (ScoreDatabase.giveScore(receiverName,-args[2].toInt(),args[3],sender)){
+                            if (ScoreDatabase.giveScore(receiverName,args[2].toInt(),args[3],sender)){
                                 sendMessage(sender,"§a${receiverName}に${args[2]}ポイント与えました")
 
                                 Bukkit.getScheduler().runTask(this, Runnable {
@@ -74,7 +74,7 @@ class Man10Score : JavaPlugin() , Listener{
 
                         "take" ->{
 
-                            if (ScoreDatabase.giveScore(receiverName,args[2].toInt(),args[3],sender)){
+                            if (ScoreDatabase.giveScore(receiverName,-args[2].toInt(),args[3],sender)){
                                 sendMessage(sender,"§a${receiverName}から${args[2]}ポイント引きました")
                                 return@execute
                             }
