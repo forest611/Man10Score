@@ -66,7 +66,7 @@ object ScoreDatabase {
     }
 
     fun canThank(uuid: UUID):Boolean{
-        val rs = mysql.query("select date from score_log where uuid='$uuid' and note='[give]:Thankした';")?:return true
+        val rs = mysql.query("select date from score_log where uuid='$uuid' and note='[give]:Thankした' ORDER BY date DESC LIMIT 1;")?:return true
 
         var ret = false
 
