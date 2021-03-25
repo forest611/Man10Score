@@ -133,13 +133,13 @@ class Man10Score : JavaPlugin() , Listener{
                     return true
                 }
 
-//                if (sender == receiver){
-//                    sendMessage(sender,"§c自分にThankはできません！")
-//                    return true
-//                }
+                if (sender == receiver){
+                    sendMessage(sender,"§c自分にThankはできません！")
+                    return true
+                }
 
-                broadcast("§aあなたは${receiver.name}に§d感謝しました")
-                broadcast("§aあなたは${sender.name}から§d感謝されました")
+                broadcast("§a${sender.name}は${receiver.name}に§d感謝しました")
+                sendMessage(receiver,"§aあなたは${sender.name}から§d感謝されました")
 
                 es.execute {
                     ScoreDatabase.giveScore(receiver.name,5,"Thankされた",sender)
