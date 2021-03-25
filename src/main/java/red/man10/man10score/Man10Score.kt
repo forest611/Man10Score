@@ -43,7 +43,7 @@ class Man10Score : JavaPlugin() , Listener{
                     return true
                 }
 
-                if (args.size!=4){
+                if (args.isNullOrEmpty()){
 
                     sendMessage(sender,"§a/mscore give <player> <score> <理由> : 指定ユーザーにスコアを与えます")
                     sendMessage(sender,"§a/mscore take <player> <score> <理由> : 指定ユーザーのスコアを減らします")
@@ -121,15 +121,25 @@ class Man10Score : JavaPlugin() , Listener{
 
                 if (args.isEmpty())return false
 
-                val receiver = Bukkit.getPlayer(args[0])?:return false
+                val receiver = Bukkit.getPlayer(args[0])
 
-                if (!ScoreDatabase.canThank(receiver.uniqueId)){
+                if (!ScoreDatabase.canThank(sender.uniqueId)){
                     sendMessage(sender,"§cクールダウンによりThankはできません")
                     return true
                 }
 
-                sendMessage(sender,"§aあなたは${receiver.name}に§d感謝しました")
-                sendMessage(receiver,"§aあなたは${sender.name}から§d感謝されました")
+                if (receiver == null){
+                    sendMessage(sender,"§c現在オフラインのプレイヤーです！")
+                    return true
+                }
+
+//                if (sender == receiver){
+//                    sendMessage(sender,"§c自分にThankはできません！")
+//                    return true
+//                }
+
+                broadcast("§aあなたは${receiver.name}に§d感謝しました")
+                broadcast("§aあなたは${sender.name}から§d感謝されました")
 
                 es.execute {
                     ScoreDatabase.giveScore(receiver.name,5,"Thankされた",sender)
@@ -149,14 +159,19 @@ class Man10Score : JavaPlugin() , Listener{
 
                 if (args.isEmpty())return false
 
-                val receiver = Bukkit.getPlayer(args[0])?:return false
+                val receiver = Bukkit.getPlayer(args[0])
+
+                if (receiver == null){
+                    sendMessage(sender,"§c現在オフラインのプレイヤーです！")
+                    return true
+                }
 
                 broadcast("§c§l${sender.name}は${receiver.name}に「Fuck！」といったことにより、20ポイント引かれました！")
 
                 es.execute {
                     ScoreDatabase.giveScore(receiver.name,0,"FUCKされた",sender)
                     ScoreDatabase.giveScore(sender.name,-20,"FUCKした",sender)
-                    showScore(receiver)
+//                    showScore(receiver)
                 }
 
             }

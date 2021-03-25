@@ -48,7 +48,7 @@ object ScoreDatabase {
         mysql.execute("update player_data set score=score+$amount where uuid='$uuid';")
 
         mysql.execute("INSERT INTO score_log (mcid, uuid, score, note, issuer,now_score, date) " +
-                "VALUES ('$mcid', '$uuid', $amount, '[give]:$reason',${getScore(uuid)}, '$issuer', now())")
+                "VALUES ('$mcid', '$uuid', $amount, '[give]:$reason','${issuer.name}',${getScore(uuid)}, now())")
 
         return true
     }
@@ -60,13 +60,13 @@ object ScoreDatabase {
         mysql.execute("update player_data set score=$amount where uuid='$uuid';")
 
         mysql.execute("INSERT INTO score_log (mcid, uuid, score, note, issuer,now_score, date) " +
-                "VALUES ('$mcid', '$uuid', $amount, '[set]:$reason',${getScore(uuid)}, '${issuer.name}', now())")
+                "VALUES ('$mcid', '$uuid', $amount, '[set]:$reason', '${issuer.name}',${getScore(uuid)}, now())")
 
         return true
     }
 
     fun canThank(uuid: UUID):Boolean{
-        val rs = mysql.query("select * from score_log where uuid=$uuid and reason='[give]:Thankした';")?:return true
+        val rs = mysql.query("select date from score_log where uuid='$uuid' and note='[give]:Thankした';")?:return true
 
         var ret = false
 
