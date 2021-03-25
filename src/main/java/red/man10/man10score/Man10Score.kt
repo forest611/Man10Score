@@ -155,7 +155,7 @@ class Man10Score : JavaPlugin() , Listener{
                 es.execute {
                     ScoreDatabase.giveScore(receiver.name,5,"Thankされた",sender)
                     ScoreDatabase.giveScore(sender.name,0,"Thankした",sender)
-                    showScore(receiver)
+//                    showScore(receiver)
                 }
 
             }
