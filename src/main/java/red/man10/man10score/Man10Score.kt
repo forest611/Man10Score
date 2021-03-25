@@ -59,6 +59,8 @@ class Man10Score : JavaPlugin() , Listener{
 
                         "give" ->{
 
+                            if (args.size!=4)return@execute
+
                             if (ScoreDatabase.giveScore(receiverName,args[2].toInt(),args[3],sender)){
                                 sendMessage(sender,"§a${receiverName}に${args[2]}ポイント与えました")
 
@@ -74,6 +76,8 @@ class Man10Score : JavaPlugin() , Listener{
 
                         "take" ->{
 
+                            if (args.size!=4)return@execute
+
                             if (ScoreDatabase.giveScore(receiverName,-args[2].toInt(),args[3],sender)){
                                 sendMessage(sender,"§a${receiverName}から${args[2]}ポイント引きました")
                                 return@execute
@@ -85,6 +89,8 @@ class Man10Score : JavaPlugin() , Listener{
 
                         "set"  ->{
 
+                            if (args.size!=4)return@execute
+
                             if (ScoreDatabase.setScore(receiverName,args[2].toInt(),args[3],sender)){
                                 sendMessage(sender,"§a${receiverName}のスコアを${args[2]}ポイントに設定しました")
                                 return@execute
@@ -92,6 +98,11 @@ class Man10Score : JavaPlugin() , Listener{
 
                             sendMessage(sender,"§cユーザーが見つかりませんでした")
 
+                        }
+
+                        else ->{
+
+                            sendMessage(sender,"${args[0]}のスコア:${ScoreDatabase.getScore(args[0])}")
                         }
                     }
                 }

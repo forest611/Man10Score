@@ -40,6 +40,24 @@ object ScoreDatabase {
         return score
     }
 
+    fun getScore(mcid:String):Int{
+
+        val uuid = getUUID(mcid)
+
+        val rs = mysql.query("select score from player_data where uuid='$uuid';")?:return 0
+
+        var score = 0
+
+        if (rs.next()){
+            score = rs.getInt("score")
+        }
+
+        rs.close()
+        mysql.close()
+
+        return score
+    }
+
 
     fun giveScore(mcid:String,amount:Int,reason:String,issuer:CommandSender): Boolean {
 
