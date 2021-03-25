@@ -42,20 +42,9 @@ object ScoreDatabase {
 
     fun getScore(mcid:String):Int{
 
-        val uuid = getUUID(mcid)
+        var uuid = getUUID(mcid)?:return 0
 
-        val rs = mysql.query("select score from player_data where uuid='$uuid';")?:return 0
-
-        var score = 0
-
-        if (rs.next()){
-            score = rs.getInt("score")
-        }
-
-        rs.close()
-        mysql.close()
-
-        return score
+        return getScore(uuid)
     }
 
 
