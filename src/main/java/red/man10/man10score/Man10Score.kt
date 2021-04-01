@@ -31,6 +31,14 @@ class Man10Score : JavaPlugin() , Listener{
 
     override fun onDisable() {
         // Plugin shutdown logic
+
+        //  remove thread pool
+        es.shutdown()
+        Thread{
+            while (es.isTerminated){
+                Thread.sleep(100)
+            }
+        }.start()
     }
 
     override fun onCommand(sender: CommandSender, command: Command, label: String, args: Array<out String>): Boolean {
