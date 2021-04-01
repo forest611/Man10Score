@@ -5,7 +5,10 @@ import java.util.*
 
 object ScoreDatabase {
 
-    private val mysql = MySQLManager(Man10Score.plugin,"Score")
+    //  use lazy
+    private val mysql:MySQLManager by lazy {
+        MySQLManager(Man10Score.plugin,"Score")
+    }
 
     private fun getUUID(name:String):UUID?{
 
