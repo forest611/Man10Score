@@ -50,7 +50,7 @@ class Man10Score : JavaPlugin() , Listener{
                         §a/mscore take <player> <score> <理由> : 指定ユーザーのスコアを減らします
                         §a/mscore set <player> <score> <理由>  : 指定ユーザーのスコアを指定値にします
                     """.trimIndent()
-                    sender.sendMessage(msg)
+                    sender.sendMessageWithPrefix(msg)
                     return true
                 }
 
@@ -64,7 +64,7 @@ class Man10Score : JavaPlugin() , Listener{
                             if (args.size!=4)return@execute
 
                             if (ScoreDatabase.giveScore(receiverName,args[2].toInt(),args[3],sender)){
-                                sender.sendMessage("§a${receiverName}に${args[2]}ポイント与えました")
+                                sender.sendMessageWithPrefix("§a${receiverName}に${args[2]}ポイント与えました")
 
                                 Bukkit.getScheduler().runTask(this, Runnable {
                                     broadcast("§a${receiverName}は「${args[3]}」により、${args[2]}ポイント受け取りました。")
@@ -72,7 +72,7 @@ class Man10Score : JavaPlugin() , Listener{
                                 return@execute
                             }
 
-                            sender.sendMessage("§cユーザーが見つかりませんでした")
+                            sender.sendMessageWithPrefix("§cユーザーが見つかりませんでした")
 
                         }
 
@@ -81,11 +81,11 @@ class Man10Score : JavaPlugin() , Listener{
                             if (args.size!=4)return@execute
 
                             if (ScoreDatabase.giveScore(receiverName,-args[2].toInt(),args[3],sender)){
-                                sender.sendMessage("§a${receiverName}から${args[2]}ポイント引きました")
+                                sender.sendMessageWithPrefix("§a${receiverName}から${args[2]}ポイント引きました")
                                 return@execute
                             }
 
-                            sender.sendMessage("§cユーザーが見つかりませんでした")
+                            sender.sendMessageWithPrefix("§cユーザーが見つかりませんでした")
 
                         }
 
@@ -94,17 +94,17 @@ class Man10Score : JavaPlugin() , Listener{
                             if (args.size!=4)return@execute
 
                             if (ScoreDatabase.setScore(receiverName,args[2].toInt(),args[3],sender)){
-                                sender.sendMessage("§a${receiverName}のスコアを${args[2]}ポイントに設定しました")
+                                sender.sendMessageWithPrefix("§a${receiverName}のスコアを${args[2]}ポイントに設定しました")
                                 return@execute
                             }
 
-                            sender.sendMessage("§cユーザーが見つかりませんでした")
+                            sender.sendMessageWithPrefix("§cユーザーが見つかりませんでした")
 
                         }
 
                         else ->{
 
-                            sender.sendMessage("${args[0]}のスコア:${ScoreDatabase.getScore(args[0])}")
+                            sender.sendMessageWithPrefix("${args[0]}のスコア:${ScoreDatabase.getScore(args[0])}")
                         }
                     }
                 }
@@ -137,22 +137,22 @@ class Man10Score : JavaPlugin() , Listener{
                 val receiver = Bukkit.getPlayer(args[0])
 
                 if (!ScoreDatabase.canThank(sender.uniqueId)){
-                    sender.sendMessage("§cクールダウンによりThankはできません")
+                    sender.sendMessageWithPrefix("§cクールダウンによりThankはできません")
                     return true
                 }
 
                 if (receiver == null){
-                    sender.sendMessage("§c現在オフラインのプレイヤーです！")
+                    sender.sendMessageWithPrefix("§c現在オフラインのプレイヤーです！")
                     return true
                 }
 
                 if (sender == receiver){
-                    sender.sendMessage("§c自分にThankはできません！")
+                    sender.sendMessageWithPrefix("§c自分にThankはできません！")
                     return true
                 }
 
                 broadcast("§a${sender.name}は${receiver.name}に§d感謝しました")
-                receiver.sendMessage("§aあなたは${sender.name}から§d感謝されました")
+                receiver.sendMessageWithPrefix("§aあなたは${sender.name}から§d感謝されました")
 
                 es.execute {
                     ScoreDatabase.giveScore(receiver.name,5,"Thankされた",sender)
@@ -175,7 +175,7 @@ class Man10Score : JavaPlugin() , Listener{
                 val receiver = Bukkit.getPlayer(args[0])
 
                 if (receiver == null){
-                    sender.sendMessage("§c現在オフラインのプレイヤーです！")
+                    sender.sendMessageWithPrefix("§c現在オフラインのプレイヤーです！")
                     return true
                 }
 
@@ -206,10 +206,10 @@ class Man10Score : JavaPlugin() , Listener{
     }
 
     private fun Player.showScore(){
-        this.sendMessage("§a現在の${this.name}のスコア：${ScoreDatabase.getScore(this.uniqueId)}ポイント")
+        this.sendMessageWithPrefix("§a現在の${this.name}のスコア：${ScoreDatabase.getScore(this.uniqueId)}ポイント")
     }
 
-    private fun CommandSender.sendMessage(text:String){
+    private fun CommandSender.sendMessageWithPrefix(text:String){
         this.sendMessage(prefix+text)
     }
 
