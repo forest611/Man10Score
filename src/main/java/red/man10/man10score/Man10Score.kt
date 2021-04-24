@@ -80,6 +80,10 @@ class Man10Score : JavaPlugin() , Listener{
 
                             if (ScoreDatabase.giveScore(receiverName,-args[2].toInt(),args[3],sender)){
                                 sendMessage(sender,"§a${receiverName}から${args[2]}ポイント引きました")
+                                Bukkit.getScheduler().runTask(this, Runnable {
+                                    broadcast("§c${receiverName}は「${args[3]}」により、${args[2]}ポイント引かれました！。")
+                                })
+
                                 return@execute
                             }
 
