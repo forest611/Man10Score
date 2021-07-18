@@ -139,7 +139,7 @@ class Man10Score : JavaPlugin() , Listener{
                 val receiver = Bukkit.getPlayer(args[0])
 
                 if (!ScoreDatabase.canThank(sender.uniqueId)){
-                    sendMessage(sender,"§cクールダウンによりThankはできません")
+                    sendMessage(sender,"§cクールダウンによりThankは使えません")
                     return true
                 }
 
@@ -177,11 +177,11 @@ class Man10Score : JavaPlugin() , Listener{
                 val receiver = Bukkit.getPlayer(args[0])
 
                 if (receiver == null){
-                    sendMessage(sender,"§c現在オフラインのプレイヤーです！")
+                    sendMessage(sender,"§c相手がオフラインです！")
                     return true
                 }
 
-                broadcast("§c§l${sender.name}は${receiver.name}に「Fuck！」といったことにより、20ポイント引かれました！")
+                broadcast("§c§l${sender.name}は${receiver.name}に「ファック！」といったことにより、20ポイント引かれました！")
 
                 es.execute {
                     ScoreDatabase.giveScore(receiver.name,0,"FUCKされた",sender)
@@ -208,7 +208,7 @@ class Man10Score : JavaPlugin() , Listener{
     }
 
     private fun showScore(p:Player){
-        sendMessage(p,"§a現在の${p.name}のスコア：${ScoreDatabase.getScore(p.uniqueId)}ポイント")
+        sendMessage(p,"§a${p.name}のスコア：${ScoreDatabase.getScore(p.uniqueId)}ポイント")
     }
 
     private fun sendMessage(p:CommandSender,text:String){
