@@ -2,7 +2,6 @@ package red.man10.man10score
 
 import org.bukkit.command.CommandSender
 import java.util.*
-import kotlin.collections.HashMap
 
 object ScoreDatabase {
 
