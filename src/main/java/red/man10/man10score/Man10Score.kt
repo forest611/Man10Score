@@ -126,6 +126,29 @@ class Man10Score : JavaPlugin() , Listener{
                 }
             }
 
+            "scoreranking"->{
+                if (sender is Player){
+                    if (!sender.hasPermission("man10score.user")){
+                        return true
+                    }
+                }
+
+                val page = if (args.isEmpty()) 1 else args[0].toIntOrNull()?:1
+
+                var i = (page*10)-9
+
+                sender.sendMessage("§6§k§lXX§a§lスコアトップ${page*10}§6§k§lXX")
+
+                es.execute {
+                    for (data in ScoreDatabase.getScoreRanking(page)){
+                        sender.sendMessage("§7§l${i}.§b§l${data.first} : §a§l${data.second}ポイント")
+                        i++
+                    }
+                }
+
+
+            }
+
             "thank" ->{
 
                 if (!sender.hasPermission("man10score.user")){
