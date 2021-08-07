@@ -105,8 +105,10 @@ class Man10Score : JavaPlugin() , Listener{
                         }
 
                         else ->{
+                            sendMessage(sender,"§a/mscore give <player> <score> <理由> : 指定ユーザーにスコアを与えます")
+                            sendMessage(sender,"§a/mscore take <player> <score> <理由> : 指定ユーザーのスコアを減らします")
+                            sendMessage(sender,"§a/mscore set <player> <score> <理由>  : 指定ユーザーのスコアを指定値にします")
 
-                            sendMessage(sender,"${args[0]}のスコア:${ScoreDatabase.getScore(args[0])}")
                         }
                     }
                 }
