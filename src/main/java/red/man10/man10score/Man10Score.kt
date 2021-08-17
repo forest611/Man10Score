@@ -106,6 +106,18 @@ class Man10Score : JavaPlugin() , Listener{
 
                         }
 
+                        "show" ->{
+
+                            if (args.size!=2)return@execute
+
+                            if (ScoreDatabase.getUUID(receiverName)!=null){
+                                sendMessage(sender,"§a${receiverName}のスコアは${ScoreDatabase.getScore(receiverName)}ポイントです")
+                            }
+
+                            sendMessage(sender,"§cユーザーが見つかりませんでした")
+
+                        }
+
                         else ->{
                             sendMessage(sender,"§a/mscore give <player> <score> <理由> : 指定ユーザーにスコアを与えます")
                             sendMessage(sender,"§a/mscore take <player> <score> <理由> : 指定ユーザーのスコアを減らします")
@@ -193,7 +205,6 @@ class Man10Score : JavaPlugin() , Listener{
                     ScoreDatabase.giveScore(sender.name,-20,"FUCKした",sender)
 //                    showScore(receiver)
                 }
-
             }
 
         }
