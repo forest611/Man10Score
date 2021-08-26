@@ -1,5 +1,7 @@
 package red.man10.man10score
 
+import net.kyori.adventure.text.Component.text
+import net.kyori.adventure.text.event.ClickEvent
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
@@ -109,12 +111,33 @@ class Man10Score : JavaPlugin() , Listener{
                         "show" ->{
 
                             if (args.size!=2)return@execute
+                            sendMessage(sender,"§a${receiverName}のスコアは${ScoreDatabase.getScore(receiverName)}です")
 
-                            if (ScoreDatabase.getUUID(receiverName)!=null){
-                                sendMessage(sender,"§a${receiverName}のスコアは${ScoreDatabase.getScore(receiverName)}ポイントです")
-                            }
+                        }
 
-                            sendMessage(sender,"§cユーザーが見つかりませんでした")
+                        "log" ->{
+
+                            val page = if (args.size >= 2) args[2].toIntOrNull()?:0 else 0
+
+                            Bukkit.getScheduler().runTaskAsynchronously(this, Runnable {
+                                val list = ScoreDatabase.getScoreLog(receiverName,page)
+
+                                sendMessage(sender,"§d§l===========スコアの履歴==========")
+                                for (data in list){
+                                    sendMessage(sender,"§e${data.dateFormat} ${data.note} ${data.amount}")
+                                }
+
+                                val previous = if (page!=0) {
+                                    text("${prefix}§b§l<<==前のページ ").clickEvent(ClickEvent.runCommand("/mscore log ${page-1}"))
+                                }else text(prefix)
+
+                                val next = if (list.size == 10){
+                                    text("§b§l次のページ==>>").clickEvent(ClickEvent.runCommand("/mscore log ${page+1}"))
+                                }else text("")
+
+                                sender.sendMessage(previous.append(next))
+
+                            })
 
                         }
 
