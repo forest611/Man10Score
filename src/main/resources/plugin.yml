@@ -13,3 +13,5 @@ commands:
     default: op
   fuck:
     default: op
+  mfreeze:
+    default: op

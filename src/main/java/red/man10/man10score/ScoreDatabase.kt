@@ -67,6 +67,7 @@ object ScoreDatabase {
         mysql.execute("update player_data set score=score+${amount} where uuid='$uuid';")
 
         mysql.execute("INSERT INTO score_log (mcid, uuid, score, note, issuer,now_score, date) " + "VALUES ('$mcid', '$uuid', $amount, '[give]:$reason','${issuer.name}',${getScore(uuid)}, now())")
+        println("INSERT INTO score_log (mcid, uuid, score, note, issuer,now_score, date) " + "VALUES ('$mcid', '$uuid', $amount, '[give]:$reason','${issuer.name}',${getScore(uuid)}, now())")
 
         return true
     }
@@ -111,15 +112,14 @@ object ScoreDatabase {
     fun getScoreLog(mcid:String,page:Int): MutableList<ScoreLog>{
 
         val rs = mysql.query("select * from Score_log where uuid='${getUUID(mcid)}' order by id desc Limit 10 offset ${(page)*10};")?:return Collections.emptyList()
-
         val list = mutableListOf<ScoreLog>()
 
         while (rs.next()){
 
             val data = ScoreLog()
 
-            data.amount = rs.getDouble("amount")
-            data.note = rs.getString("display_note")?:rs.getString("note")!!
+            data.score = rs.getDouble("score")
+            data.note = rs.getString("note")!!
             data.dateFormat = simpleDateFormat.format(rs.getTimestamp("date"))
 
             list.add(data)
@@ -132,9 +132,29 @@ object ScoreDatabase {
 
     }
 
+    fun isFrozen(mcid:String): Boolean{
+
+        val rs = mysql.query("select freeze_until from player_data where uuid='${getUUID(mcid)}'")?:return false
+        if(rs.next()){
+            if(rs.getString("freeze_until")==null)return false
+        }
+        return true
+
+    }
+
+    fun setFreeze(mcid:String,freeze_until:Date): Boolean{
+
+        val uuid = getUUID(mcid)?:return false
+
+        mysql.execute("update player_data set freeze_until='${SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(freeze_until)}' where uuid='$uuid';")
+
+        return true
+
+    }
+
     class ScoreLog{
 
-        var amount = 0.0
+        var score = 0.0
         var note = ""
         var dateFormat = ""
 

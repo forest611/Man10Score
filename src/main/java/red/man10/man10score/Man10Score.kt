@@ -9,7 +9,10 @@ import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerLoginEvent
+import org.bukkit.event.player.PlayerMoveEvent
 import org.bukkit.plugin.java.JavaPlugin
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.Executors
 
 class Man10Score : JavaPlugin() , Listener{
@@ -124,7 +127,7 @@ class Man10Score : JavaPlugin() , Listener{
 
                                 sendMessage(sender,"§d§l===========スコアの履歴==========")
                                 for (data in list){
-                                    sendMessage(sender,"§e${data.dateFormat} ${data.note} ${data.amount}")
+                                    sendMessage(sender,"§e${data.dateFormat} §e§l${data.note} §e${data.score}")
                                 }
 
                                 val previous = if (page!=0) {
@@ -230,6 +233,34 @@ class Man10Score : JavaPlugin() , Listener{
                 }
             }
 
+            "mfreeze"->{
+
+                if (!sender.hasPermission("man10score.op")){
+                    return true
+                }
+
+                val calendar = Calendar.getInstance()
+
+                val freezeuntil = calendar.time
+
+                when(args[1]){
+
+                    "d" ->addDate(freezeuntil,0,0,args[2].toInt())
+                    "h" ->addDate(freezeuntil,0,args[2].toInt(),0)
+                    "m" ->addDate(freezeuntil,args[2].toInt(),0,0)
+                    "k" ->addDate(freezeuntil,0,0,383512)
+
+                    else -> {
+                        sendMessage(sender,"§c§l時間の指定方法が不適切です")
+                        return true
+                    }
+
+                }
+
+                ScoreDatabase.setFreeze(args[0],freezeuntil)
+
+            }
+
         }
 
         return false
@@ -244,6 +275,16 @@ class Man10Score : JavaPlugin() , Listener{
             Thread.sleep(500)
             showScore(p)
         }
+
+    }
+
+    @EventHandler
+    fun onPlayerMove(e:PlayerMoveEvent){
+
+        if(ScoreDatabase.isFrozen(e.player.name)){
+            e.isCancelled = true
+        }
+
     }
 
     private fun showScore(p:Player){
@@ -257,4 +298,23 @@ class Man10Score : JavaPlugin() , Listener{
     private fun broadcast(text: String){
         Bukkit.broadcastMessage(prefix+text)
     }
+
+    private fun addDate(date: Date?, min:Int, hour:Int, day:Int): Date? {
+
+        val calender = Calendar.getInstance()
+
+        calender.time = date?: Date()
+        calender.add(Calendar.MINUTE,min)
+        calender.add(Calendar.HOUR,hour)
+        calender.add(Calendar.DATE,day)
+
+        val time = calender.time
+
+        if (time.time< Date().time){
+            return null
+        }
+
+        return time
+    }
+
 }
