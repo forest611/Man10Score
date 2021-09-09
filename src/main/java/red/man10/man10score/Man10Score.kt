@@ -45,7 +45,7 @@ class Man10Score : JavaPlugin() , Listener{
                     return true
                 }
 
-                if (args.isNullOrEmpty()){
+                if (args.isNullOrEmpty() || args.size < 2){
 
                     sendMessage(sender,"§a/mscore give <player> <score> <理由> : 指定ユーザーにスコアを与えます")
                     sendMessage(sender,"§a/mscore take <player> <score> <理由> : 指定ユーザーのスコアを減らします")
@@ -117,22 +117,24 @@ class Man10Score : JavaPlugin() , Listener{
 
                         "log" ->{
 
-                            val page = if (args.size >= 2) args[2].toIntOrNull()?:0 else 0
+                            if(args.size < 2 || args.size > 3)return@execute
+
+                            val page = if (args.size >= 3) args[2].toIntOrNull()?:0 else 0
 
                             Bukkit.getScheduler().runTaskAsynchronously(this, Runnable {
                                 val list = ScoreDatabase.getScoreLog(receiverName,page)
 
                                 sendMessage(sender,"§d§l===========スコアの履歴==========")
                                 for (data in list){
-                                    sendMessage(sender,"§e${data.dateFormat} ${data.note} ${data.amount}")
+                                    sendMessage(sender,"§e${data.dateFormat} §e§l${data.note} §e${data.score}")
                                 }
 
                                 val previous = if (page!=0) {
-                                    text("${prefix}§b§l<<==前のページ ").clickEvent(ClickEvent.runCommand("/mscore log ${page-1}"))
+                                    text("${prefix}§b§l<<==前のページ ").clickEvent(ClickEvent.runCommand("/mscore log $receiverName ${page-1}"))
                                 }else text(prefix)
 
                                 val next = if (list.size == 10){
-                                    text("§b§l次のページ==>>").clickEvent(ClickEvent.runCommand("/mscore log ${page+1}"))
+                                    text("§b§l次のページ==>>").clickEvent(ClickEvent.runCommand("/mscore log $receiverName ${page+1}"))
                                 }else text("")
 
                                 sender.sendMessage(previous.append(next))

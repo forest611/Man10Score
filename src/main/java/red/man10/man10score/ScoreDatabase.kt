@@ -118,8 +118,8 @@ object ScoreDatabase {
 
             val data = ScoreLog()
 
-            data.amount = rs.getDouble("amount")
-            data.note = rs.getString("display_note")?:rs.getString("note")!!
+            data.score = rs.getDouble("score")
+            data.note = rs.getString("note")!!
             data.dateFormat = simpleDateFormat.format(rs.getTimestamp("date"))
 
             list.add(data)
@@ -134,7 +134,7 @@ object ScoreDatabase {
 
     class ScoreLog{
 
-        var amount = 0.0
+        var score = 0.0
         var note = ""
         var dateFormat = ""
 
