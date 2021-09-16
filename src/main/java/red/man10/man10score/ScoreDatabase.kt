@@ -1,6 +1,7 @@
 package red.man10.man10score
 
 import org.bukkit.command.CommandSender
+import java.text.SimpleDateFormat
 import java.util.*
 
 object ScoreDatabase {
@@ -65,8 +66,7 @@ object ScoreDatabase {
 
         mysql.execute("update player_data set score=score+${amount} where uuid='$uuid';")
 
-        mysql.execute("INSERT INTO score_log (mcid, uuid, score, note, issuer,now_score, date) " +
-                "VALUES ('$mcid', '$uuid', $amount, '[give]:$reason','${issuer.name}',${getScore(uuid)}, now())")
+        mysql.execute("INSERT INTO score_log (mcid, uuid, score, note, issuer,now_score, date) " + "VALUES ('$mcid', '$uuid', $amount, '[give]:$reason','${issuer.name}',${getScore(uuid)}, now())")
 
         return true
     }
@@ -77,8 +77,7 @@ object ScoreDatabase {
 
         mysql.execute("update player_data set score=$amount where uuid='$uuid';")
 
-        mysql.execute("INSERT INTO score_log (mcid, uuid, score, note, issuer,now_score, date) " +
-                "VALUES ('$mcid', '$uuid', $amount, '[set]:$reason', '${issuer.name}',${getScore(uuid)}, now())")
+        mysql.execute("INSERT INTO score_log (mcid, uuid, score, note, issuer,now_score, date) " + "VALUES ('$mcid', '$uuid', $amount, '[set]:$reason', '${issuer.name}',${getScore(uuid)}, now())")
 
         return true
     }
@@ -106,4 +105,39 @@ object ScoreDatabase {
 
         return ret
     }
+
+    private val simpleDateFormat = SimpleDateFormat("yyyy-MM/dd HH:mm")
+
+    fun getScoreLog(mcid:String,page:Int): MutableList<ScoreLog>{
+
+        val rs = mysql.query("select * from Score_log where uuid='${getUUID(mcid)}' order by id desc Limit 10 offset ${(page)*10};")?:return Collections.emptyList()
+
+        val list = mutableListOf<ScoreLog>()
+
+        while (rs.next()){
+
+            val data = ScoreLog()
+
+            data.score = rs.getDouble("score")
+            data.note = rs.getString("note")!!
+            data.dateFormat = simpleDateFormat.format(rs.getTimestamp("date"))
+
+            list.add(data)
+        }
+
+        mysql.close()
+        rs.close()
+
+        return list
+
+    }
+
+    class ScoreLog{
+
+        var score = 0.0
+        var note = ""
+        var dateFormat = ""
+
+    }
+
 }

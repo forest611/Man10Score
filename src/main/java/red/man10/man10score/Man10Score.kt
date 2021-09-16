@@ -1,5 +1,7 @@
 package red.man10.man10score
 
+import net.kyori.adventure.text.Component.text
+import net.kyori.adventure.text.event.ClickEvent
 import org.bukkit.Bukkit
 import org.bukkit.command.Command
 import org.bukkit.command.CommandSender
@@ -43,11 +45,13 @@ class Man10Score : JavaPlugin() , Listener{
                     return true
                 }
 
-                if (args.isNullOrEmpty()){
+                if (args.isNullOrEmpty() || args.size < 2){
 
                     sendMessage(sender,"§a/mscore give <player> <score> <理由> : 指定ユーザーにスコアを与えます")
                     sendMessage(sender,"§a/mscore take <player> <score> <理由> : 指定ユーザーのスコアを減らします")
                     sendMessage(sender,"§a/mscore set <player> <score> <理由>  : 指定ユーザーのスコアを指定値にします")
+                    sendMessage(sender,"§a/mscore show <player> : 指定ユーザーのスコアを確認します")
+                    sendMessage(sender,"§a/mscore log <player> : 指定ユーザーのスコアのログを確認します")
 
                     return true
                 }
@@ -104,11 +108,47 @@ class Man10Score : JavaPlugin() , Listener{
 
                         }
 
+                        "show" ->{
+
+                            if (args.size!=2)return@execute
+                            sendMessage(sender,"§a${receiverName}のスコアは${ScoreDatabase.getScore(receiverName)}です")
+
+                        }
+
+                        "log" ->{
+
+                            if(args.size < 2 || args.size > 3)return@execute
+
+                            val page = if (args.size >= 3) args[2].toIntOrNull()?:0 else 0
+
+                            Bukkit.getScheduler().runTaskAsynchronously(this, Runnable {
+                                val list = ScoreDatabase.getScoreLog(receiverName,page)
+
+                                sendMessage(sender,"§d§l===========スコアの履歴==========")
+                                for (data in list){
+                                    sendMessage(sender,"§e${data.dateFormat} §e§l${data.note} §e${data.score}")
+                                }
+
+                                val previous = if (page!=0) {
+                                    text("${prefix}§b§l<<==前のページ ").clickEvent(ClickEvent.runCommand("/mscore log $receiverName ${page-1}"))
+                                }else text(prefix)
+
+                                val next = if (list.size == 10){
+                                    text("§b§l次のページ==>>").clickEvent(ClickEvent.runCommand("/mscore log $receiverName ${page+1}"))
+                                }else text("")
+
+                                sender.sendMessage(previous.append(next))
+
+                            })
+
+                        }
+
                         else ->{
                             sendMessage(sender,"§a/mscore give <player> <score> <理由> : 指定ユーザーにスコアを与えます")
                             sendMessage(sender,"§a/mscore take <player> <score> <理由> : 指定ユーザーのスコアを減らします")
                             sendMessage(sender,"§a/mscore set <player> <score> <理由>  : 指定ユーザーのスコアを指定値にします")
-
+                            sendMessage(sender,"§a/mscore show <player> : 指定ユーザーのスコアを確認します")
+                            sendMessage(sender,"§a/mscore log <player> : 指定ユーザーのスコアのログを確認します")
                         }
                     }
                 }
@@ -190,7 +230,6 @@ class Man10Score : JavaPlugin() , Listener{
                     ScoreDatabase.giveScore(sender.name,-20,"FUCKした",sender)
 //                    showScore(receiver)
                 }
-
             }
 
         }
