@@ -1,5 +1,6 @@
 package red.man10.man10score
 
+import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.Component.text
 import net.kyori.adventure.text.event.ClickEvent
 import org.bukkit.Bukkit
@@ -125,7 +126,7 @@ class Man10Score : JavaPlugin() , Listener{
 
                             sendMessage(sender,"§d§l===========スコアの履歴==========")
                             for (data in list){
-                                sendMessage(sender,"§e${data.dateFormat} §e§l${data.note} §e${data.score}")
+                                sendMessage(sender,"§e${data.dateFormat} §e§l${formatNote(data.note,(data.score>=0))} §e${data.score}")
                             }
 
                             val previous = if (page!=0) {
@@ -231,11 +232,43 @@ class Man10Score : JavaPlugin() , Listener{
 
             "scorelog" ->{
 
+                es.execute {
+                    if(args.size > 1)return@execute
+
+                    val page = if (args.size >= 3) args[0].toIntOrNull()?:0 else 0
+
+                    val list = ScoreDatabase.getScoreLog(sender.name,page)
+
+                    sendMessage(sender,"§d§l===========スコアの履歴==========")
+                    for (data in list){
+                        sendMessage(sender,"§e${data.dateFormat} §e§l${formatNote(data.note,(data.score>=0))} §e${data.score}")
+                    }
+
+                    val previous = if (page!=0) {
+                        text("${prefix}§b§l<<==前のページ ").clickEvent(ClickEvent.runCommand("/mscore log ${sender.name} ${page-1}"))
+                    }else text(prefix)
+
+                    val next = if (list.size == 10){
+                        text("§b§l次のページ==>>").clickEvent(ClickEvent.runCommand("/mscore log ${sender.name} ${page+1}"))
+                    }else text("")
+
+                    sender.sendMessage(previous.append(next))
+                }
+
             }
 
         }
 
         return false
+    }
+
+    private fun formatNote(note:String,isPlus:Boolean):String{
+        val ret = if (isPlus){
+            note.replace("[give]:","§a§l+ ")
+        }else{
+            note.replace("[give]:","§c§l- ")
+        }
+        return ret
     }
 
     @EventHandler
@@ -258,6 +291,6 @@ class Man10Score : JavaPlugin() , Listener{
     }
 
     private fun broadcast(text: String){
-        Bukkit.broadcastMessage(prefix+text)
+        Bukkit.broadcast(text(prefix+text))
     }
 }

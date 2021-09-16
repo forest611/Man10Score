@@ -13,3 +13,5 @@ commands:
     default: op
   fuck:
     default: op
+  scorelog:
+    default: op
