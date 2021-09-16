@@ -106,11 +106,11 @@ object ScoreDatabase {
         return ret
     }
 
-    private val simpleDateFormat = SimpleDateFormat("yyyy-MM/dd HH:mm")
+    private val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
 
     fun getScoreLog(mcid:String,page:Int): MutableList<ScoreLog>{
 
-        val rs = mysql.query("select * from Score_log where uuid='${getUUID(mcid)}' order by id desc Limit 10 offset ${(page)*10};")?:return Collections.emptyList()
+        val rs = mysql.query("select * from score_log where uuid='${getUUID(mcid)}' order by id desc Limit 10 offset ${(page)*10};")?:return Collections.emptyList()
 
         val list = mutableListOf<ScoreLog>()
 
