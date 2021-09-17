@@ -8,8 +8,10 @@ import org.bukkit.command.CommandSender
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
+import org.bukkit.event.player.PlayerInteractEvent
 import org.bukkit.event.player.PlayerLoginEvent
 import org.bukkit.event.player.PlayerMoveEvent
+import org.bukkit.event.player.PlayerQuitEvent
 import org.bukkit.plugin.java.JavaPlugin
 import java.text.SimpleDateFormat
 import java.util.*
@@ -23,6 +25,7 @@ class Man10Score : JavaPlugin() , Listener{
 
     companion object{
         lateinit var plugin : Man10Score
+        val freezePlayerList = mutableSetOf<String>()
     }
 
     override fun onEnable() {
@@ -276,12 +279,34 @@ class Man10Score : JavaPlugin() , Listener{
             showScore(p)
         }
 
+        if(ScoreDatabase.isFrozen(e.player.name)){
+            freezePlayerList.add(e.player.name)
+        }
+
+    }
+
+    @EventHandler
+    fun logoutEvent(e:PlayerQuitEvent){
+
+        if(ScoreDatabase.isFrozen(e.player.name)){
+            freezePlayerList.remove(e.player.name)
+        }
+
     }
 
     @EventHandler
     fun onPlayerMove(e:PlayerMoveEvent){
 
-        if(ScoreDatabase.isFrozen(e.player.name)){
+        if(freezePlayerList.contains(e.player.name)){
+            e.isCancelled = true
+        }
+
+    }
+
+    @EventHandler
+    fun onPlayerInteract(e:PlayerInteractEvent){
+
+        if(freezePlayerList.contains(e.player.name)){
             e.isCancelled = true
         }
 
