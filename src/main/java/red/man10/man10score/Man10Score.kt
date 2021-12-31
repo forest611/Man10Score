@@ -234,7 +234,7 @@ class Man10Score : JavaPlugin() , Listener{
                 es.execute {
                     if(args.size > 1)return@execute
 
-                    val page = if (args.size >= 3) args[0].toIntOrNull()?:0 else 0
+                    val page = if (args.isNotEmpty()) args[0].toIntOrNull()?:0 else 0
 
                     val list = ScoreDatabase.getScoreLog(sender.name,page)
 
@@ -244,11 +244,11 @@ class Man10Score : JavaPlugin() , Listener{
                     }
 
                     val previous = if (page!=0) {
-                        text("${prefix}§b§l<<==前のページ ").clickEvent(ClickEvent.runCommand("/scorelog ${sender.name} ${page-1}"))
+                        text("${prefix}§b§l<<==前のページ ").clickEvent(ClickEvent.runCommand("/scorelog ${page-1}"))
                     }else text(prefix)
 
                     val next = if (list.size == 10){
-                        text("§b§l次のページ==>>").clickEvent(ClickEvent.runCommand("/scorelog ${sender.name} ${page+1}"))
+                        text("§b§l次のページ==>>").clickEvent(ClickEvent.runCommand("/scorelog ${page+1}"))
                     }else text("")
 
                     sender.sendMessage(previous.append(next))
