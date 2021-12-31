@@ -1,6 +1,5 @@
 package red.man10.man10score
 
-import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.Component.text
 import net.kyori.adventure.text.event.ClickEvent
 import org.bukkit.Bukkit
@@ -245,11 +244,11 @@ class Man10Score : JavaPlugin() , Listener{
                     }
 
                     val previous = if (page!=0) {
-                        text("${prefix}§b§l<<==前のページ ").clickEvent(ClickEvent.runCommand("/mscore log ${sender.name} ${page-1}"))
+                        text("${prefix}§b§l<<==前のページ ").clickEvent(ClickEvent.runCommand("/scorelog ${sender.name} ${page-1}"))
                     }else text(prefix)
 
                     val next = if (list.size == 10){
-                        text("§b§l次のページ==>>").clickEvent(ClickEvent.runCommand("/mscore log ${sender.name} ${page+1}"))
+                        text("§b§l次のページ==>>").clickEvent(ClickEvent.runCommand("/scorelog ${sender.name} ${page+1}"))
                     }else text("")
 
                     sender.sendMessage(previous.append(next))
