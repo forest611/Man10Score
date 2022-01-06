@@ -59,6 +59,19 @@ object ScoreDatabase {
         return score
     }
 
+    fun getScoreRanking(page : Int): MutableList<Pair<String, Int>> {
+
+        val list = mutableListOf<Pair<String,Int>>()
+
+        val rs = mysql.query("select score from player_data order by score desc limit 10 offset ${(page*10)-10}")?:return mutableListOf(Pair("",0))
+
+        while (rs.next()){
+            list.add(Pair(rs.getString("mcid"),rs.getInt("score")))
+        }
+
+        return list
+    }
+
 
     fun giveScore(mcid:String,amount:Int,reason:String,issuer:CommandSender): Boolean {
 
