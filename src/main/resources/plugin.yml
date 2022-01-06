@@ -15,3 +15,5 @@ commands:
     default: op
   scorelog:
     default: op
+  scoreranking:
+    default: op

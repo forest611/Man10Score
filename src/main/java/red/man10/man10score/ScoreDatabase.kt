@@ -63,7 +63,7 @@ object ScoreDatabase {
 
         val list = mutableListOf<Pair<String,Int>>()
 
-        val rs = mysql.query("select score from player_data order by score desc limit 10 offset ${(page*10)-10}")?:return mutableListOf(Pair("",0))
+        val rs = mysql.query("select mcid,score from player_data order by score desc limit 10 offset ${(page*10)-10}")?:return mutableListOf(Pair("",0))
 
         while (rs.next()){
             list.add(Pair(rs.getString("mcid"),rs.getInt("score")))

@@ -180,7 +180,7 @@ class Man10Score : JavaPlugin() , Listener{
 
                 es.execute {
                     for (data in ScoreDatabase.getScoreRanking(page)){
-                        sender.sendMessage("§7§l${i}.§b§l${data.first} : §a§l${data.second}ポイント")
+                        sender.sendMessage("§7§l${i}.§b§l${data.first} : §a§l${data.second}Pt")
                         i++
                     }
                 }
