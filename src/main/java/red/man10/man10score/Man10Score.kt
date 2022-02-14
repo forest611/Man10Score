@@ -243,7 +243,7 @@ class Man10Score : JavaPlugin() , Listener{
                     return true
                 }
 
-                broadcast("§c§l${sender.name}は${receiver.name}に「ファック！」といったことにより、20ポイント引かれました！")
+                broadcast("§c${sender.name}は${receiver.name}に「ファック！」といったことにより、20ポイント引かれました！")
 
                 es.execute {
                     ScoreDatabase.giveScore(receiver.name,0,"FUCKされた",sender)
@@ -275,6 +275,27 @@ class Man10Score : JavaPlugin() , Listener{
                     }else text("")
 
                     sender.sendMessage(previous.append(next))
+                }
+
+            }
+
+            "uinfo" ->{
+
+                es.execute {
+                    val p = if (args.isEmpty()) sender.name else args[0]
+
+                    val data = ScoreDatabase.getActionCount(p)
+
+                    if (!data.getData){
+                        sendMessage(sender,"§cオフラインか存在しないプレイヤーです")
+                        return@execute
+                    }
+
+                    sendMessage(sender,"§a§l===========ユーザー情報==========")
+                    sendMessage(sender,"§a§l${p}のスコア：${ScoreDatabase.getScore(p)}ポイント")
+                    sendMessage(sender,"§a§lThankした回数:${data.doThank}  Thankされた回数:${data.givenThank}")
+                    sendMessage(sender,"§c§lFuckした回数:${data.doFuck}  Fuckされた回数:${data.givenFuck}")
+
                 }
 
             }

@@ -17,3 +17,5 @@ commands:
     default: op
   scoreranking:
     default: op
+  uinfo:
+    default: op
