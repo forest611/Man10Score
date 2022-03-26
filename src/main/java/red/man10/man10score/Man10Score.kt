@@ -15,11 +15,16 @@ import java.util.concurrent.Executors
 class Man10Score : JavaPlugin() , Listener{
 
     private val es = Executors.newCachedThreadPool()
-    private val prefix = "§b[§dMan10Score§b]"
+
 
 
     companion object{
         lateinit var plugin : Man10Score
+        private const val prefix = "§b[§dMan10Score§b]"
+
+        fun sendMessage(p:CommandSender,text:String){
+            p.sendMessage(prefix+text)
+        }
     }
 
     override fun onEnable() {
@@ -327,10 +332,6 @@ class Man10Score : JavaPlugin() , Listener{
 
     private fun showScore(p:Player){
         sendMessage(p,"§a${p.name}のスコア：${ScoreDatabase.getScore(p.uniqueId)}ポイント")
-    }
-
-    private fun sendMessage(p:CommandSender,text:String){
-        p.sendMessage(prefix+text)
     }
 
     private fun broadcast(text: String){
