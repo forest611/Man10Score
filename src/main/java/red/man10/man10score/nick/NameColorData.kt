@@ -1,5 +1,6 @@
 package red.man10.man10score.nick
 
+import net.kyori.adventure.text.Component
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.enchantments.Enchantment
@@ -21,10 +22,11 @@ object NameColorData {
     init {
         val meta = ticketItem.itemMeta
         meta.setCustomModelData(2)
-        meta.setDisplayName("§a§lネームカラー§6§lチケット")
-        meta.lore = mutableListOf("§fマインクラフトの表示名の色を変えたい時に","交換するチケット")
-        meta.addEnchant(Enchantment.LUCK,0,false)
+        meta.displayName(Component.text("§a§lネームカラー§6§lチケット"))
+        meta.lore = mutableListOf("§fマインクラフトの表示名の色を変えたい時に","§f交換するチケット")
+        meta.addEnchant(Enchantment.LUCK,1,false)
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS)
+        NameColorMenu.setID(meta,"NameColorTicket")
         ticketItem.itemMeta = meta
     }
 
@@ -79,7 +81,7 @@ object NameColorData {
 
         val handItem = p.inventory.itemInMainHand
 
-        if (!handItem.isSimilar(ticketItem)){
+        if (NameColorMenu.getID(handItem)!="NameColorTicket"){
             sendMessage(p,"利き手にチケットを持ってください！")
             return
         }
@@ -91,11 +93,16 @@ object NameColorData {
 
         handItem.amount = handItem.amount-ticket
 
-        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),"/nick ${p.name} ${code}${if (isBold)"§l" else ""}${if (isItalic)"§o" else ""}${p.name}")
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),"nick ${p.name} ${code}${if (isBold)"§l" else ""}${if (isItalic)"§o" else ""}${p.name}")
 
         sendMessage(p,"名前の表示名を変更しました！")
 
         Thread{ ScoreDatabase.giveScore(p.name,0,"表示名の変更",Bukkit.getConsoleSender()) }.start()
+    }
+
+    fun resetColor(p:Player){
+        Bukkit.dispatchCommand(Bukkit.getConsoleSender(),"nick ${p.name} off")
+        sendMessage(p,"名前の表示名を元に戻しました！")
     }
 
     class ColorData{

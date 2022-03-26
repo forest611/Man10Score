@@ -11,6 +11,8 @@ import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerLoginEvent
 import org.bukkit.plugin.java.JavaPlugin
 import red.man10.man10score.nick.NameColorCommand
+import red.man10.man10score.nick.NameColorData
+import red.man10.man10score.nick.NameColorMenu
 import java.util.concurrent.Executors
 
 class Man10Score : JavaPlugin() , Listener{
@@ -33,8 +35,11 @@ class Man10Score : JavaPlugin() , Listener{
         saveDefaultConfig()
 
         server.pluginManager.registerEvents(this,this)
+        server.pluginManager.registerEvents(NameColorMenu,this)
         getCommand("namecolor")!!.setExecutor(NameColorCommand)
         plugin = this
+
+        NameColorData.loadColorList()
 
     }
 

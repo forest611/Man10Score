@@ -18,6 +18,11 @@ object NameColorCommand : CommandExecutor{
             return true
         }
 
+        if (args.isEmpty()){
+            NameColorMenu.openColorMenu(sender)
+            return true
+        }
+
         if (args[0]=="reload"){
             if (!sender.hasPermission("man10score.op"))return false
             NameColorData.loadColorList()
@@ -29,10 +34,6 @@ object NameColorCommand : CommandExecutor{
             sender.inventory.addItem(NameColorData.ticketItem)
             return true
         }
-
-        val score = ScoreDatabase.getScore(sender.uniqueId)
-
-
 
         return false
     }
