@@ -34,6 +34,8 @@ object NameColorData {
 
         plugin.reloadConfig()
 
+        colorList.clear()
+
         val list = plugin.config.getStringList("colorData")
 
         list.forEach {

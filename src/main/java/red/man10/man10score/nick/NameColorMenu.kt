@@ -64,9 +64,7 @@ object NameColorMenu : Listener{
         val bMeta = bold.itemMeta
         bMeta.setCustomModelData(66)
         bMeta.displayName(Component.text("§f§l太字"))
-        bMeta.lore = mutableListOf(
-            "§f表示例:${c.code}${if (c.isBold)"§l" else ""}${if (c.isItalic)"§o" else ""}${p.name}"
-            ,"§f必要チケット:${boldData.second}枚","§f解放条件:スコア${boldData.first}以上")
+        bMeta.lore = mutableListOf("§f必要チケット:${boldData.second}枚","§f解放条件:スコア${boldData.first}以上")
         setID(bMeta,"bold")
         bold.itemMeta = bMeta
 
@@ -74,9 +72,7 @@ object NameColorMenu : Listener{
         val iMeta = italic.itemMeta
         iMeta.setCustomModelData(73)
         iMeta.displayName(Component.text("§f§o斜体"))
-        iMeta.lore = mutableListOf(
-            "§f表示例:${c.code}${if (c.isBold)"§l" else ""}${if (c.isItalic)"§o" else ""}${p.name}"
-            ,"§f必要チケット:${italicData.second}枚","§f解放条件:スコア${italicData.first}以上")
+        iMeta.lore = mutableListOf("§f必要チケット:${italicData.second}枚","§f解放条件:スコア${italicData.first}以上")
         setID(iMeta,"italic")
         italic.itemMeta = iMeta
 
