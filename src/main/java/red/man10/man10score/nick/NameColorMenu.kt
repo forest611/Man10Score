@@ -100,8 +100,6 @@ object NameColorMenu : Listener{
     fun openCheckMenu(p:Player){
 
         val c = userCache[p]?:Cache()
-        c.openingMenuID = 3
-        userCache[p] = c
 
         val data = NameColorData.ColorData.getColorData(c.code)!!
 
@@ -141,6 +139,10 @@ object NameColorMenu : Listener{
         }
 
         p.openInventory(inv)
+
+        c.openingMenuID = 3
+        userCache[p] = c
+
     }
 
     //4

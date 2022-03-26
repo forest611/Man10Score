@@ -97,6 +97,8 @@ object NameColorData {
 
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),"nick ${p.name} ${code}${if (isBold)"§l" else ""}${if (isItalic)"§o" else ""}${p.name}")
 
+//        p.setDisplayName("${code}${if (isBold)"§l" else ""}${if (isItalic)"§o" else ""}${p.name}")
+
         sendMessage(p,"名前の表示名を変更しました！")
 
         Thread{ ScoreDatabase.giveScore(p.name,0,"表示名の変更",Bukkit.getConsoleSender()) }.start()
