@@ -4,3 +4,12 @@ mysql:
   user: root
   pass: pass
   port: 3306
+colorData:
+  - '黄緑;§a;LIME_DYE;1000;10' #example
+
+bold:
+  score: 1000
+  ticket: 1
+italic:
+  score: 1000
+  ticket: 1

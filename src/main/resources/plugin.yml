@@ -19,5 +19,5 @@ commands:
     default: op
   uinfo:
     default: op
-  nickcolor:
+  namecolor:
     default: op
