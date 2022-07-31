@@ -204,14 +204,10 @@ object ScoreDatabase {
 
     fun getSubAccount(uuid: UUID):List<UUID> {
 
-        val name = Bukkit.getOfflinePlayer(uuid).name
-
         val db = MySQLManager(plugin,"AltCheck")
 
-        val rs = db.query("select uuid " +
-                "from connection_log " +
-                "where ip in (select ip from connection_log where mcid = '${name}' group by mcid, ip order by ip) " +
-                "group by mcid;")?:return Collections.emptyList()
+        val rs = db.query("select uuid from connection_log where ip in (select ip from connection_log " +
+                "where uuid = '${uuid}' group by mcid, ip order by ip) group by uuid;")?:return Collections.emptyList()
 
         val accountList = mutableListOf<UUID>()
 
