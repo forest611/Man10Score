@@ -104,6 +104,8 @@ object NameColorData {
         Thread{ ScoreDatabase.giveScore(p.name,0,"表示名の変更",Bukkit.getConsoleSender()) }.start()
     }
 
+    //1 , 1+(L/3) , 1+(L%3)+2*(L/3) man10カラーのための式
+
     fun resetColor(p:Player){
         Bukkit.dispatchCommand(Bukkit.getConsoleSender(),"nick ${p.name} off")
         sendMessage(p,"名前の表示名を元に戻しました！")

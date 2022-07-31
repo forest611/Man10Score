@@ -1,6 +1,9 @@
 package red.man10.man10score
 
+import org.bukkit.Bukkit
 import org.bukkit.command.CommandSender
+import org.bukkit.entity.Player
+import red.man10.man10score.Man10Score.Companion.plugin
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -193,6 +196,31 @@ object ScoreDatabase {
         mysql.close()
 
         return actionData
+    }
+
+    fun getSubAccount(p:Player):List<UUID> {
+        return getSubAccount(p.uniqueId)
+    }
+
+    fun getSubAccount(uuid: UUID):List<UUID> {
+
+        val name = Bukkit.getOfflinePlayer(uuid).name
+
+        val db = MySQLManager(plugin,"AltCheck")
+
+        val rs = db.query("select uuid " +
+                "from connection_log " +
+                "where ip in (select ip from connection_log where mcid = '${name}' group by mcid, ip order by ip) " +
+                "group by mcid;")?:return Collections.emptyList()
+
+        val accountList = mutableListOf<UUID>()
+
+        while (rs.next()){accountList.add(UUID.fromString(rs.getString("uuid")))}
+
+        rs.close()
+        db.close()
+
+        return accountList.toList()
     }
 
     class ScoreLog {
