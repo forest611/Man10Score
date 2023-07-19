@@ -13,7 +13,7 @@ object ScoreDatabase {
 
     private fun getUUID(name: String): UUID? {
 
-        val rs = mysql.query("select uuid from player_data where mcid='$name';") ?: return null
+        val rs = mysql.query("select uuid from player_data where mcid='${MySQLManager.escapeStringForMySQL(name)}';") ?: return null
 
         var uuid: UUID? = null
 
@@ -85,7 +85,7 @@ object ScoreDatabase {
         mysql.execute("update player_data set score=score+${amount} where uuid='$uuid';")
 
         mysql.execute(
-            "INSERT INTO score_log (mcid, uuid, score, note, issuer,now_score, date) " + "VALUES ('$mcid', '$uuid', $amount, '[give]:$reason','${issuer.name}',${
+            "INSERT INTO score_log (mcid, uuid, score, note, issuer,now_score, date) " + "VALUES ('$mcid', '$uuid', $amount, '[give]:${MySQLManager.escapeStringForMySQL(reason)}','${issuer.name}',${
                 getScore(
                     uuid
                 )
@@ -102,7 +102,7 @@ object ScoreDatabase {
         mysql.execute("update player_data set score=$amount where uuid='$uuid';")
 
         mysql.execute(
-            "INSERT INTO score_log (mcid, uuid, score, note, issuer,now_score, date) " + "VALUES ('$mcid', '$uuid', $amount, '[set]:$reason', '${issuer.name}',${
+            "INSERT INTO score_log (mcid, uuid, score, note, issuer,now_score, date) " + "VALUES ('$mcid', '$uuid', $amount, '[set]:${MySQLManager.escapeStringForMySQL(reason)}', '${issuer.name}',${
                 getScore(
                     uuid
                 )
