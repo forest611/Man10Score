@@ -21,10 +21,10 @@ class Man10Score : JavaPlugin() , Listener{
 
     companion object{
         lateinit var plugin : Man10Score
-        private const val prefix = "§b[§dMan10Score§b]"
+        private const val PREFIX = "§b[§dMan10Score§b]"
 
         fun sendMessage(p:CommandSender,text:String){
-            p.sendMessage(prefix+text)
+            p.sendMessage(PREFIX+text)
         }
     }
 
@@ -146,8 +146,8 @@ class Man10Score : JavaPlugin() , Listener{
                             }
 
                             val previous = if (page!=0) {
-                                text("${prefix}§b§l<<==前のページ ").clickEvent(ClickEvent.runCommand("/mscore log $receiverName ${page-1}"))
-                            }else text(prefix)
+                                text("${PREFIX}§b§l<<==前のページ ").clickEvent(ClickEvent.runCommand("/mscore log $receiverName ${page-1}"))
+                            }else text(PREFIX)
 
                             val next = if (list.size == 10){
                                 text("§b§l次のページ==>>").clickEvent(ClickEvent.runCommand("/mscore log $receiverName ${page+1}"))
@@ -286,7 +286,7 @@ class Man10Score : JavaPlugin() , Listener{
                     return true
                 }
 
-                broadcast("§c${sender.name}は${receiver.name}に「ファック！」といったことにより、20ポイント引かれました！")
+                broadcast("§c${sender.name}は${receiver.name}に「ファック！」といったことにより、${Configuration.fuckAmount}ポイント引かれました！")
 
                 es.execute {
                     ScoreDatabase.giveScore(receiver.name,0,"FUCKされた",sender)
@@ -309,8 +309,8 @@ class Man10Score : JavaPlugin() , Listener{
                     }
 
                     val previous = if (page!=0) {
-                        text("${prefix}§b§l<<==前のページ ").clickEvent(ClickEvent.runCommand("/scorelog ${page-1}"))
-                    }else text(prefix)
+                        text("${PREFIX}§b§l<<==前のページ ").clickEvent(ClickEvent.runCommand("/scorelog ${page-1}"))
+                    }else text(PREFIX)
 
                     val next = if (list.size == 10){
                         text("§b§l次のページ==>>").clickEvent(ClickEvent.runCommand("/scorelog ${page+1}"))
@@ -318,7 +318,6 @@ class Man10Score : JavaPlugin() , Listener{
 
                     sender.sendMessage(previous.append(next))
                 }
-
             }
 
             "uinfo" ->{
@@ -339,11 +338,8 @@ class Man10Score : JavaPlugin() , Listener{
                     sendMessage(sender,"§c§lFuckした回数:${data.doFuck}  Fuckされた回数:${data.givenFuck}")
 
                 }
-
             }
-
         }
-
         return false
     }
 
@@ -372,6 +368,6 @@ class Man10Score : JavaPlugin() , Listener{
     }
 
     private fun broadcast(text: String){
-        Bukkit.broadcast(text(prefix+text))
+        Bukkit.broadcast(text(PREFIX+text))
     }
 }
