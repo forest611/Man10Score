@@ -19,8 +19,6 @@ class Man10Score : JavaPlugin() , Listener{
 
     private val es = Executors.newCachedThreadPool()
 
-
-
     companion object{
         lateinit var plugin : Man10Score
         private const val prefix = "§b[§dMan10Score§b]"
@@ -34,12 +32,16 @@ class Man10Score : JavaPlugin() , Listener{
         // Plugin startup logic
         saveDefaultConfig()
 
-        server.pluginManager.registerEvents(this,this)
-        server.pluginManager.registerEvents(NameColorMenu,this)
-        getCommand("namecolor")!!.setExecutor(NameColorCommand)
         plugin = this
 
+        server.pluginManager.registerEvents(this,this)
+        server.pluginManager.registerEvents(NameColorMenu,this)
+
+        getCommand("namecolor")!!.setExecutor(NameColorCommand)
+
         NameColorData.loadColorList()
+
+        Configuration.loadConfig()
 
     }
 
@@ -64,6 +66,9 @@ class Man10Score : JavaPlugin() , Listener{
                     sendMessage(sender,"§a/mscore set <player> <score> <理由>  : 指定ユーザーのスコアを指定値にします")
                     sendMessage(sender,"§a/mscore show <player> : 指定ユーザーのスコアを確認します")
                     sendMessage(sender,"§a/mscore log <player> : 指定ユーザーのスコアのログを確認します")
+                    sendMessage(sender,"§a/mscore setthank <amount> : Thankのポイントを設定します")
+                    sendMessage(sender,"§a/mscore setfuck <amount> : Fuckのポイントを設定します")
+                    sendMessage(sender,"§a/mscore reload : コンフィグをリロードします")
 
                     return true
                 }
@@ -152,12 +157,38 @@ class Man10Score : JavaPlugin() , Listener{
 
                         }
 
+                        "setthank" ->{
+                            if (args.size!=2)return@execute
+
+                            Configuration.thankAmount = args[1].toInt()
+                            Configuration.saveConfig()
+
+                            sendMessage(sender,"§aThankのポイントを${args[1]}に設定しました")
+                        }
+
+                        "setfuck" ->{
+                            if (args.size!=2)return@execute
+
+                            Configuration.fuckAmount = args[1].toInt()
+                            Configuration.saveConfig()
+
+                            sendMessage(sender,"§aFuckのポイントを${args[1]}に設定しました")
+                        }
+
+                        "reload" ->{
+                            Configuration.loadConfig()
+                            sendMessage(sender,"§aコンフィグをリロードしました")
+                        }
+
                         else ->{
                             sendMessage(sender,"§a/mscore give <player> <score> <理由> : 指定ユーザーにスコアを与えます")
                             sendMessage(sender,"§a/mscore take <player> <score> <理由> : 指定ユーザーのスコアを減らします")
                             sendMessage(sender,"§a/mscore set <player> <score> <理由>  : 指定ユーザーのスコアを指定値にします")
                             sendMessage(sender,"§a/mscore show <player> : 指定ユーザーのスコアを確認します")
                             sendMessage(sender,"§a/mscore log <player> : 指定ユーザーのスコアのログを確認します")
+                            sendMessage(sender,"§a/mscore setthank <amount> : Thankのポイントを設定します")
+                            sendMessage(sender,"§a/mscore setfuck <amount> : Fuckのポイントを設定します")
+                            sendMessage(sender,"§a/mscore reload : コンフィグをリロードします")
                         }
                     }
                 }
@@ -231,7 +262,7 @@ class Man10Score : JavaPlugin() , Listener{
                 sendMessage(receiver,"§aあなたは${sender.name}から§d感謝されました")
 
                 es.execute {
-                    ScoreDatabase.giveScore(receiver.name,5,"Thankされた",sender)
+                    ScoreDatabase.giveScore(receiver.name,Configuration.thankAmount,"Thankされた",sender)
                     ScoreDatabase.giveScore(sender.name,0,"Thankした",sender)
                     showScore(receiver)
                 }
@@ -259,8 +290,7 @@ class Man10Score : JavaPlugin() , Listener{
 
                 es.execute {
                     ScoreDatabase.giveScore(receiver.name,0,"FUCKされた",sender)
-                    ScoreDatabase.giveScore(sender.name,-20,"FUCKした",sender)
-//                    showScore(receiver)
+                    ScoreDatabase.giveScore(sender.name,Configuration.fuckAmount,"FUCKした",sender)
                 }
             }
 
