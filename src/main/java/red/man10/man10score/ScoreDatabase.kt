@@ -11,6 +11,7 @@ object ScoreDatabase {
 
     private val mysql = MySQLManager(Man10Score.plugin, "Score")
 
+    @Synchronized
     private fun getUUID(name: String): UUID? {
 
         val rs = mysql.query("select uuid from player_data where mcid='$name';") ?: return null
@@ -28,6 +29,7 @@ object ScoreDatabase {
 
     }
 
+    @Synchronized
     fun getScore(uuid: UUID): Int {
 
         val rs = mysql.query("select score from player_data where uuid='$uuid';") ?: return 0
@@ -44,6 +46,7 @@ object ScoreDatabase {
         return score
     }
 
+    @Synchronized
     fun getScore(mcid: String): Int {
 
         val uuid = getUUID(mcid)
@@ -77,7 +80,7 @@ object ScoreDatabase {
         return list
     }
 
-
+    @Synchronized
     fun giveScore(mcid: String, amount: Int, reason: String, issuer: CommandSender): Boolean {
 
         val uuid = getUUID(mcid) ?: return false
@@ -95,6 +98,7 @@ object ScoreDatabase {
         return true
     }
 
+    @Synchronized
     fun setScore(mcid: String, amount: Int, reason: String, issuer: CommandSender): Boolean {
 
         val uuid = getUUID(mcid) ?: return false
@@ -112,6 +116,7 @@ object ScoreDatabase {
         return true
     }
 
+    @Synchronized
     fun canThank(uuid: UUID): Boolean {
         val rs =
             mysql.query("select date from score_log where uuid='$uuid' and note='[give]:Thankした' ORDER BY date DESC LIMIT 1;")
@@ -140,6 +145,7 @@ object ScoreDatabase {
 
     private val simpleDateFormat = SimpleDateFormat("yyyy-MM-dd HH:mm")
 
+    @Synchronized
     fun getScoreLog(mcid: String, page: Int): MutableList<ScoreLog> {
 
         val rs =
@@ -167,6 +173,7 @@ object ScoreDatabase {
     }
 
     //thank fuckの回数
+    @Synchronized
     fun getActionCount(mcid: String): ActionData {
 
         val actionData = ActionData()
