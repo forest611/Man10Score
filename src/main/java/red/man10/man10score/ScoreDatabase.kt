@@ -226,6 +226,23 @@ object ScoreDatabase {
         return accountList.toList()
     }
 
+    fun getConnectingSeconds(uuid: UUID):Int{
+        val db = MySQLManager(plugin,"AltCheck")
+
+        val rs = db.query("SELECT SUM(connection_seconds) AS total_connection_time FROM connection_log WHERE uuid = '${uuid}';")?:return 0
+
+        var seconds = 0
+
+        if (rs.next()){
+            seconds = rs.getInt("total_connection_time")
+        }
+
+        rs.close()
+        db.close()
+
+        return seconds
+    }
+
     class ScoreLog {
 
         var score = 0.0
